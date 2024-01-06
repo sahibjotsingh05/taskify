@@ -25,6 +25,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(express.json({ limit: "10kb" }));
+app.use(cookieParser());
 
 // Test Middlewares
 app.use((req, res, next) => {

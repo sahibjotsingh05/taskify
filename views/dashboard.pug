@@ -8,5 +8,162 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js')
+    script(src='/assets/js/script.js')
   body
-    h1 welcome
+    .blackbody
+    .popup
+      span.material-symbols-outlined cancel
+      br
+      input(type="text", placeholder="name")
+      br
+      input(type="text", placeholder="description")
+      br
+      input(type="text", placeholder="start")
+      br
+      input(type="text", placeholder="end")
+      br
+      span Recurring
+      br
+      input(type="radio", placeholder="",  name="reccuringBool")
+      span Yes
+      input(type="radio", placeholder="",  name="reccuringBool")
+      span No
+      br
+      span If Yes, When?
+      br
+      input(type="radio", placeholder="", name="reccuringType")
+      span Daily
+      input(type="radio", placeholder="", name="reccuringType")
+      span Weekly
+      input(type="radio", placeholder="", name="reccuringType")
+      span Monthly
+      br
+      button(id="createTask") Create Task
+    .staging-area
+      .upperRow
+        .calendarArea
+          .wrapper
+            .calendar-header
+              p.current-date
+              .icons
+                span#prev.material-symbols-rounded chevron_left
+                span#next.material-symbols-rounded chevron_right
+            .calendar
+              ul.weeks
+                li Sun
+                li Mon
+                li Tue
+                li Wed
+                li Thu
+                li Fri
+                li Sat
+              ul.days
+        .todayTasks
+          h2.taskHeading TODAY&apos;S TASKS
+          .task-view.drag-containers
+            .task.draggable-task(draggable='true', data-taskid='1')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='2')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='3')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Compe club Meeting
+              .badges
+                span.badge-restricted Restricted
+        .unassignedTasks
+          h2.taskHeading UNASSIGNED TASKS
+          .task-view.drag-containers
+            .task.draggable-task(draggable='true', data-taskid='4')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='5')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='6')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Compe club Meeting
+              .badges
+                span.badge-restricted Restricted
+            .task.draggable-task(draggable='true', data-taskid='7')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Math 100 Assignment 2
+            .task.draggable-task(draggable='true', data-taskid='8')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Go to the Gym
+              .badges
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='9')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+            .task.draggable-task(draggable='true', data-taskid='10')
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading PHYS 130 Homework 1
+              .badges
+                span.badge-restricted Restricted
+                span.badge-recurring Recurring
+      .lowerRow
+        .timeline
+          .times
+            each hour in ["12","01","02","03","04","05","06","07","08","09","10","11"]
+              .hour
+                .time= `${hour}:00 AM`
+                .division
+                .division
+                .division
+                .division
+            each hour in ["12","01","02","03","04","05","06","07","08","09","10","11"]
+              .hour
+                .time= `${hour}:00 PM`
+                .division
+                .division
+                .division
+                .division
+          .timetasks
+            .task.timebasedtask
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Compe club Meeting
+              .badges
+                span.badge-restricted Restricted
+            .task.timebasedtask
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Compe club Meeting
+              .badges
+                span.badge-restricted Restricted
+            .task.timebasedtask
+              span.material-symbols-outlined.move-symbol
+                | drag_indicator
+              span.task-heading Compe club Meeting
+              .badges
+                span.badge-restricted Restricted
+        .widgets
+          button.createTask CREATE TASK

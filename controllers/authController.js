@@ -85,6 +85,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
+    res.redirect("/login");
     return next(
       new AppError("You are not logged in! Please log in to get access.", 401)
     );
@@ -104,13 +105,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
 
-  // 4) Check if user changed password after the token was issued
-  if (currentUser.changedPasswordAfter(decoded.iat)) {
-    return next(
-      new AppError("User recently changed password! Please log in again.", 401)
-    );
-  }
-
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   res.locals.user = currentUser;
@@ -119,7 +113,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 // Only for rendered pages, no errors!
 exports.isLoggedIn = async (req, res, next) => {
-  if (req.cookies) {
+  if (req.cookies.jwt) {
     try {
       // 1) verify token
       const decoded = await promisify(jwt.verify)(
