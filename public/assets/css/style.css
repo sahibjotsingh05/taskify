@@ -1,0 +1,49 @@
+:root {
+  --dark-purple: #331d2c;
+  --purple: #3f2e3e;
+  --light-purple: #a78295;
+  --white-purple: #efe1d1;
+  --white: white;
+  --red: #ef4040;
+  --blue: #7b66ff;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
+  background-color: var(--dark-purple);
+}
+.logo-big {
+  font-size: 15vh;
+  width: 100%;
+  color: var(--white);
+  text-align: center;
+}
+.text-field {
+  width: 26vw;
+  height: 5vh;
+  border: none;
+  border-radius: 4px;
+  margin-top: 2vh;
+  font-size: 15px;
+  color: black;
+}
+.form-credentials {
+  text-align: center;
+}
+.form-credentials button {
+  border: none;
+  cursor: pointer;
+  background: var(--light-purple);
+  color: var(--dark-purple);
+  font-weight: bold;
+  font-size: 22px;
+  border-radius: 4px;
+  margin: 2vh 0vw;
+  height: 5vh;
+}
+.form-credentials a {
+  color: white;
+  text-decoration: none;
+}
