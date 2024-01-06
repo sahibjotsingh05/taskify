@@ -11,3 +11,9 @@ exports.getSignupPage = catchAsync(async (req, res, next) => {
     title: "Signup",
   });
 });
+
+exports.getHomePage = catchAsync(async (req, res, next) => {
+  res.status(200).render("dashboard", {
+    title: "Welcome to Dashboard",
+  });
+});
