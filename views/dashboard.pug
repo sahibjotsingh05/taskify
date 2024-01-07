@@ -4,42 +4,52 @@ html
     link(rel='preconnect', href='https://fonts.googleapis.com')
     link(rel='preconnect', href='https://fonts.gstatic.com', crossorigin='')
     link(href='https://fonts.googleapis.com/css2?family=Roboto&display=swap', rel='stylesheet')
-    link(rel='stylesheet', href='assets/css/style.css')
+    link(rel='stylesheet', href='/assets/css/style.css')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
     link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js')
     script(src='/assets/js/script.js')
   body
+    input(type="hidden", value=`${day}`, id='hidden-day')
+    input(type="hidden", value=`${month}`, id='hidden-month')
+    input(type="hidden", value=`${year}`, id='hidden-year')
     .blackbody
-    .popup
-      span.material-symbols-outlined cancel
+    .popup#popup1
+      span(style="margin-left: 95.6%;", id="cross1").material-symbols-outlined cancel
       br
-      input(type="text", placeholder="name")
+      input(type="text", placeholder="Name", class="createTaskField", id='task-name')
       br
-      input(type="text", placeholder="description")
+      input(type="text", placeholder="Description", class="createTaskField", id='task-description')
       br
-      input(type="text", placeholder="start")
+      .createTaskText What Date is this Task ? (Optional)
+      input(type="date", class="createTaskField", id="date-of-task")
       br
-      input(type="text", placeholder="end")
+      .createTaskText Starting Time ? (Optional)
+      input(type="time", class="createTaskField", id="startTime")
       br
-      span Recurring
+      .createTaskText Ending Time ? (Optional)
+      input(type="time", class="createTaskField", id="endTime")
       br
-      input(type="radio", placeholder="",  name="reccuringBool")
-      span Yes
-      input(type="radio", placeholder="",  name="reccuringBool")
-      span No
+      .createTaskText Recurring ? (Optional)
       br
-      span If Yes, When?
+      .radiobtns
+        input(type="radio", placeholder="",  name="reccuringBool", value="true")
+        span Yes
+        input(type="radio", placeholder="",  name="reccuringBool", value="false")
+        span No
       br
-      input(type="radio", placeholder="", name="reccuringType")
-      span Daily
-      input(type="radio", placeholder="", name="reccuringType")
-      span Weekly
-      input(type="radio", placeholder="", name="reccuringType")
-      span Monthly
+      .createTaskText If Yes, When?
       br
-      button(id="createTask") Create Task
+      .radiobtns
+        input(type="radio", placeholder="", name="reccuringType", value="Daily")
+        span Daily
+        input(type="radio", placeholder="", name="reccuringType", value="Weekly")
+        span Weekly
+        input(type="radio", placeholder="", name="reccuringType", value="Monthly")
+        span Monthly
+      br
+      button(id="createTaskBtn") Create Task
     .staging-area
       .upperRow
         .calendarArea
@@ -60,75 +70,39 @@ html
                 li Sat
               ul.days
         .todayTasks
-          h2.taskHeading TODAY&apos;S TASKS
+          h2.taskHeading= istoday ? 'Today\'s Tasks' : 'Tasks Assigned This Day'
           .task-view.drag-containers
-            .task.draggable-task(draggable='true', data-taskid='1')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='2')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='3')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading Compe club Meeting
-              .badges
-                span.badge-restricted Restricted
+            each task in user.tasks
+              if task.assignedDate
+                - let curdate = new Date(year, (month -1 ), day)
+                - let datex = new Date(task.assignedDate)
+                
+                
+                if (datex.getUTCDate() == day && datex.getUTCMonth() + 1 == month && datex.getUTCFullYear() == year) || (curdate.getDay() == datex.getDay() && datex < curdate)
+                  .task.draggable-task(draggable='true', data-taskid=`${task._id}`)
+                    span.material-symbols-outlined.move-symbol
+                      | drag_indicator
+                    span.task-heading= `${task.name}`
+                    .badges
+                      if task.start || task.end
+                        span.badge-restricted Restricted
+                      if task.recurring
+                        span.badge-recurring Recurring
+
         .unassignedTasks
           h2.taskHeading UNASSIGNED TASKS
           .task-view.drag-containers
-            .task.draggable-task(draggable='true', data-taskid='4')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='5')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='6')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading Compe club Meeting
-              .badges
-                span.badge-restricted Restricted
-            .task.draggable-task(draggable='true', data-taskid='7')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading Math 100 Assignment 2
-            .task.draggable-task(draggable='true', data-taskid='8')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading Go to the Gym
-              .badges
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='9')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
-            .task.draggable-task(draggable='true', data-taskid='10')
-              span.material-symbols-outlined.move-symbol
-                | drag_indicator
-              span.task-heading PHYS 130 Homework 1
-              .badges
-                span.badge-restricted Restricted
-                span.badge-recurring Recurring
+            each task in user.tasks
+              if !task.assignedDate
+                .task.draggable-task(draggable='true', data-taskid=`${task._id}`)
+                  span.material-symbols-outlined.move-symbol
+                    | drag_indicator
+                  span.task-heading= `${task.name}`
+                  .badges
+                    if task.start || task.end
+                      span.badge-restricted Restricted
+                    if task.recurring
+                      span.badge-recurring Recurring
       .lowerRow
         .timeline
           .times
@@ -166,4 +140,4 @@ html
               .badges
                 span.badge-restricted Restricted
         .widgets
-          button.createTask CREATE TASK
+          button.createTask#createMainBtn CREATE TASK

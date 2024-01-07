@@ -3,9 +3,12 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 const taskSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  name: { type: String, required: true },
-  description: { type: String, required: true },
+  _id: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
+  name: { type: String },
+  description: { type: String },
   start: { type: Date, required: false },
   end: { type: Date, required: false },
   recurring: { type: Boolean, required: true },

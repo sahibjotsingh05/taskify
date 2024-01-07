@@ -1,4 +1,64 @@
 $(document).ready(function () {
+  $(".blackbody").hide();
+  $(".popup").hide();
+  $("#createMainBtn").on("click", function () {
+    $(".blackbody").show();
+    $("#popup1").show();
+  });
+  $("#cross1").on("click", function () {
+    $(".blackbody").hide();
+    $("#popup1").hide();
+  });
+  $("#createTaskBtn").on("click", function () {
+    // Collect data from input fields and radio buttons
+    var taskName = $("#task-name").val();
+    var description = $("#task-description").val();
+    var dateOfTask = $("#date-of-task").val();
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    var recurring = $("input[name='reccuringBool']:checked").val() === "true";
+    var recurringType = $("input[name='reccuringType']:checked").val();
+
+    // Prepare JSON data
+    var jsonData = {
+      name: taskName,
+      description: description,
+      assignedDate: dateOfTask,
+      start:
+        dateOfTask && startTime
+          ? new Date(`${dateOfTask} ${startTime}`)
+          : undefined,
+      end:
+        dateOfTask && endTime
+          ? new Date(`${dateOfTask} ${endTime}`)
+          : undefined,
+      recurring: recurring,
+      recurringType: recurringType,
+      assigned: false,
+      status: "Pending",
+    };
+
+    // Make API request using $.ajax
+    $.ajax({
+      url: "/createTask", // Replace with your API endpoint
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(jsonData),
+      success: function (response) {
+        // Handle successful response
+        console.log("Response from server:", response);
+        if (response.message == "Task added successfully") {
+          alert("Task Added Successfully");
+          $(".blackbody").hide();
+          $("#popup1").hide();
+        }
+      },
+      error: function (error) {
+        // Handle error
+        console.error("Error:", error);
+      },
+    });
+  });
   $("#signupBtn").on("click", function () {
     // Collect data from text fields
     var name = $("#signup-name").val();
@@ -82,8 +142,11 @@ $(document).ready(function () {
     prevNextIcon = document.querySelectorAll(".icons span");
   // getting new date, current year and month
   let date = new Date(),
-    currYear = date.getFullYear(),
-    currMonth = date.getMonth();
+    currYear = $("#hidden-year").val(),
+    currMonth = parseInt($("#hidden-month").val()) - 1;
+  currDate = parseInt($("#hidden-day").val());
+  console.log(currDate);
+
   // storing full name of all months in array
   const months = [
     "January",
@@ -107,22 +170,33 @@ $(document).ready(function () {
     let liTag = "";
     for (let i = firstDayofMonth; i > 0; i--) {
       // creating li of previous month last days
-      liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+      liTag += `<li class="inactive" onclick="window.location.replace('/${
+        lastDateofLastMonth - i + 1
+      }/${currMonth > 0 ? currMonth : 12}/${
+        currMonth > 0 ? currYear : currYear - 1
+      }')">${lastDateofLastMonth - i + 1}</li>`;
     }
     for (let i = 1; i <= lastDateofMonth; i++) {
       // creating li of all days of current month
       // adding active class to li if the current day, month, and year matched
       let isToday =
-        i === date.getDate() &&
-        currMonth === new Date().getMonth() &&
-        currYear === new Date().getFullYear()
+        i == parseInt($("#hidden-day").val()) &&
+        currMonth == parseInt($("#hidden-month").val()) - 1 &&
+        currYear == parseInt($("#hidden-year").val())
           ? "active"
           : "";
-      liTag += `<li class="${isToday}">${i}</li>`;
+
+      liTag += `<li class="${isToday}" onclick="window.location.replace('/${i}/${
+        currMonth + 1
+      }/${currYear}')">${i}</li>`;
     }
     for (let i = lastDayofMonth; i < 6; i++) {
       // creating li of next month first days
-      liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`;
+      liTag += `<li class="inactive" onclick="window.location.replace('/${
+        i - lastDayofMonth + 1
+      }/${currMonth + 2 < 13 ? currMonth + 2 : 1}/${
+        currMonth + 2 < 13 ? currYear : parseInt(currYear) + 1
+      }')">${i - lastDayofMonth + 1}</li>`;
     }
     currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
     daysTag.innerHTML = liTag;
